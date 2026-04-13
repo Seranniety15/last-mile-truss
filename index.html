@@ -1,0 +1,605 @@
+
+
+
+<html>
+<head>
+    <title>Last-Mile Truss</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+    <style>
+        :root {
+            --accent: #658354;
+            --sage: #b3cf99;
+            --bg: #ddead1;
+            --dark: #a3c585;
+        }
+        body {
+            background-color: var(--bg);
+            font-family: "Inter", -apple-system, sans-serif;
+            margin: 0;
+            padding-top: 60px;
+        }
+        /* Clean Minimalist Nav */
+        .nav-bar {
+            background: var(--dark);
+            height: 56px;
+            display: flex;
+            align-items: center;
+            padding: 0 5%px;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 1px 10px rgba(0,0,0,0.2);
+        }
+        .brand { font-weight: 800; font-size: 1.2rem; color: #4b6043; margin-right: auto; letter-spacing: -0.5px; }
+        .menu { display: flex; gap: 5px; }
+      
+        .menu button {
+            background: none;
+            border: none;
+            color: #ffffff;
+            font-weight: 500;
+            font-size: 13px;
+            cursor: pointer;
+            padding: 6px 12px;
+            border-radius: 20px;
+            transition: 0.2s;
+        }
+        .menu button:hover { background: rgba(255,255,255,0.1); color: white; }
+        .menu button.active { background: #4b6043; color: #ffffff; }
+        
+        .page { display: none; width: 100%; margin: 0; padding: 0; }
+        .active-page { display: block; animation: slideUp 0.4s ease-out; }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .card-custom {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            border: 1px solid #efefef;
+            margin-bottom: 20px;
+        }
+       
+        .profile-circle {
+            width: 80px; height: 80px;
+            background: linear-gradient(45deg, var(--accent), #00d4ff);
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-weight: bold; font-size: 1.5rem;
+        }
+      
+        .media-box {
+            width: 100%; background: #000; border-radius: 12px;
+            aspect-ratio: 16/9; display: flex; align-items: center;
+            justify-content: center; overflow: hidden; margin-bottom: 20px;
+        }
+        input, textarea {
+            border: 1px solid #ddd; border-radius: 8px;
+            width: 100%; padding: 12px; margin-bottom: 10px; outline: none;
+        }
+        input:focus { border-color: var(--accent); }
+        .hero-full {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            margin-top: -60px;
+            overflow: hidden;
+        }
+        .hero-full img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            background-color: #f8f9f8;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+        .hero-overlay {
+            position: absolute;
+            bottom: 15%;
+            left: 8%;
+            z-index: 5;
+            color: #ddead1;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+        }
+        .green-title {
+            color: #4b6043;
+            font-size: 4.5rem;
+            font-weight: 850;
+            margin: 0;
+            text-shadow: none;
+            letter-spacing: -2px;
+        }
+        #vision .vision-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            margin-top: 20px;
+            width: 100%;
+        }
+        #vision .vision-left {
+            flex: 1;
+            min-width: 300px;
+            border: 3px solid #4b6043;
+            border-radius: 25px;
+            padding: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background-color: transparent;
+        }
+        #vision .vision-right {
+            flex: 1.2;
+            min-width: 300px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        #vision .objective-box {
+            border: 1.5px solid #ddd;
+            border-radius: 15px;
+            padding: 25px;
+            background-color: #ffffff;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.03);
+        }
+        footer {
+            width: 100%;
+            text-align: center;
+            padding: 20px 0;
+            background-color: #ddead1;
+            position: relative;
+            clear: both;
+        }
+.hero-full-screen {
+    width: 100%;
+    min-height: calc(100vh - 60px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #ddead1 0%, #b3cf99 100%);
+    padding: 20px;
+}
+.glass-container {
+    background: rgba(255, 255, 255, 0.35);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 40px;
+    padding: 30px 40px;
+    max-width: 1000px;
+    width: 95%;
+    text-align: center;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.05);
+}
+.aesthetic-title {
+    color: #4b6043;
+    font-size: 3.8rem;
+    font-weight: 850;
+    margin-bottom: 25px;
+    letter-spacing: -2px;
+    line-height: 1;
+}
+.aesthetic-text {
+    color: #556b4f;
+    font-size: 1.15rem;
+    max-width: 750px;
+    margin: 0 auto 40px;
+    line-height: 1.6;
+}
+.image-frame {
+    width: 100%;
+    max-width: 550px;
+    margin: 0 auto;
+    border: 12px solid rgba(255, 255, 255, 0.7);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+}
+.image-frame img {
+    width: 100%;
+    height: auto;
+    display: block;
+    filter: sepia(5%) contrast(105%);
+}
+
+@media (max-width: 768px) {
+    .aesthetic-title { font-size: 2.5rem; }
+    .glass-container { padding: 40px 20px; }
+}
+    </style>
+</head>
+<body>
+    <div class="nav-bar">
+        <div class="brand">LAST-MILE TRUSS</div>
+        <div class="menu">
+            <button class="active" onclick="goto('origin', this)">Home</button>
+            <button onclick="goto('vision', this)">Vision</button>
+            <button onclick="goto('blueprints', this)">Blueprints</button>
+            <button onclick="goto('pulse', this)">Free Wall</button>
+            <button onclick="goto('engineer', this)">About</button>
+        </div>
+    </div>
+<div id="global-header" style="background: linear-gradient(135deg, #4b6043 0%, #75975e 100%); padding: 80px 20px; text-align: center; color: white;">
+        <div style="background: rgba(255,255,255,0.2); width: 60px; border-radius: 15px; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; font-size: 2rem;">
+        </div>
+        <h1 style="font-weight: 850; letter-spacing: -1px; text-transform: uppercase; font-size: 2.5rem; margin-bottom: 10px;">
+            Bridging the Gap!
+        </h1>
+        <p style="font-style: italic; opacity: 0.9; max-width: 650px; margin: 0 auto; line-height: 1.6;">
+Bridging the gap for isolated Filipino communities through resilient engineering. ^^
+        </p>
+    </div>
+    <div id="origin" class="page active-page">
+    <div class="container" style="margin-top: -40px; padding-bottom: 60px;">
+        <div class="card-custom shadow-lg" style="border: none; max-width: 850px; margin: 0 auto 40px; background: white; border-radius: 20px; padding: 35px; border-left: 10px solid #b3cf99;">
+            <p style="color: #444; font-size: 1.15rem; line-height: 1.8; margin-bottom: 0;">
+In the remote corners of the Philippines, geographical barriers like raging rivers and rugged mountain terrains shouldn't be a dead-end.
+            </p>
+        </div>
+        <div style="max-width: 850px; margin: 0 auto; text-align: center;">
+            <div class="image-frame" style="border: 12px solid #ffffff; border-radius: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.12); overflow: hidden; margin-bottom: 15px;">
+                <img src="https://images.squarespace-cdn.com/content/v1/5d77c8c64043821e317677ba/1582548113306-2MNVQF20DSRD92KJRMUZ/PHI_Jones_Bridge.jpg"
+                     alt="Last-Mile Bridge Project"
+                     style="width: 100%; height: auto; display: block;">
+            </div>
+            <p style="font-size: 0.85rem; color: #4b6043; font-style: italic; opacity: 0.7; margin-top: 10px;">
+                Source: Philippine Information Agency (PIA)
+            </p>
+           
+            <div style="background: #f8fcf7; padding: 25px; border-radius: 15px; margin-top: 30px; border-top: 4px solid #4b6043; text-align: left;">
+                <p style="font-size: 1.05rem; color: #444; font-style: italic; line-height: 1.6; margin-bottom: 0;">
+                    "When a river swells, a student's education shouldn't have to pause."
+                </p>
+<div class="container mt-4 mb-5">
+    <div class="text-center mb-4">
+        <h2 style="color: #4b6043; font-weight: 800; letter-spacing: -1px;">Connecting what?</h2>
+        <p style="color: #666; font-size: 0.95rem;">Overcoming geographical barriers, one truss at a time.</p>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8 col-lg-6">
+            <div class="d-flex flex-column gap-3">
+               
+                <div style="background: white; padding: 20px; border-radius: 20px; border-left: 8px solid #b3cf99; display: flex; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                    <div style="font-size: 2rem; margin-right: 20px;"></div>
+                    <div>
+                        <h5 style="color: #4b6043; font-weight: 700; margin: 0;">Rugged Peaks</h5>
+                        <p style="font-size: 0.85rem; color: #777; margin: 0;">Navigating steep mountain slopes</p>
+                    </div>
+                </div>
+                <div style="background: white; padding: 20px; border-radius: 20px; border-left: 8px solid #b3cf99; display: flex; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                    <div style="font-size: 2rem; margin-right: 20px;"></div>
+                    <div>
+                        <h5 style="color: #4b6043; font-weight: 700; margin: 0;">Raging Rivers</h5>
+                        <p style="font-size: 0.85rem; color: #777; margin: 0;">Bridging high-risk flood zones</p>
+                    </div>
+                </div>
+                <div style="background: white; padding: 20px; border-radius: 20px; border-left: 8px solid #b3cf99; display: flex; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                    <div style="font-size: 2rem; margin-right: 20px;"></div>
+                    <div>
+                        <h5 style="color: #4b6043; font-weight: 700; margin: 0;">Resilient Tech</h5>
+                        <p style="font-size: 0.85rem; color: #777; margin: 0;">Weather-proof bridge designs</p>
+                    </div>
+                </div>
+                <div style="background: white; padding: 20px; border-radius: 20px; border-left: 8px solid #b3cf99; display: flex; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                    <div style="font-size: 2rem; margin-right: 20px;"></div>
+                    <div>
+                        <h5 style="color: #4b6043; font-weight: 700; margin: 0;">Unity</h5>
+                        <p style="font-size: 0.85rem; color: #777; margin: 0;">Connecting the last-mile sites</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <div style="margin-top: 50px; text-align: center; padding: 45px 25px; background: linear-gradient(135deg, #4b6043 0%, #3a4d33 100%); border-radius: 30px; color: white; box-shadow: 0 12px 25px rgba(0,0,0,0.15);">
+        <div style="font-size: 2rem; margin-bottom: 15px;"></div>
+        <h3 style="font-weight: 700; margin-bottom: 15px; letter-spacing: 0.5px;">Because No Community Should Be Left Behind.</h3>
+        <p style="opacity: 0.85; font-size: 1.05rem; max-width: 550px; margin: 0 auto; line-height: 1.7;">
+            Last-Mile Truss is more than just structural design; it is a commitment to safety and connectivity for those at the very edge of the map.
+        </p>
+    </div>
+</div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .compass-card {
+        background: white;
+        padding: 25px;
+        border-radius: 30px;
+        border: 2px solid #ddead1;
+        cursor: pointer;
+        transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        height: 100%;
+        position: relative;
+        overflow: hidden;
+    }
+    .compass-card:hover {
+        border-color: #4b6043;
+        box-shadow: 0 10px 20px rgba(75, 96, 67, 0.1);
+    }
+    .compass-icon { font-size: 2.5rem; margin-bottom: 10px; }
+    .compass-card h6 { color: #4b6043; font-weight: 800; text-transform: uppercase; margin-bottom: 0; }
+    .compass-content {
+        max-height: 0;
+        opacity: 0;
+        transition: all 0.5s ease;
+        font-size: 0.85rem;
+        color: #555;
+        margin-top: 0;
+        line-height: 1.5;
+    }
+    .compass-card.active { background: #f0f4ee; }
+    .compass-card.active .compass-content {
+        max-height: 150px;
+        opacity: 1;
+        margin-top: 15px;
+    }
+</style>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="vision" class="page" style="padding-top: 20px; padding-left: 20px; padding-right: 20px;">
+    <div class="container" style="margin-top: -40px; padding-bottom: 50px;">
+        <div class="card-custom shadow-lg" style="border: none; max-width: 850px; margin: 0 auto 40px; background: white; border-radius: 20px; padding: 10px; border-left: 10px solid #b3cf99;">
+            <p style="color: #4b6043; font-size: 1rem; line-height: 1.8; margin-bottom: 0; text-align: center; ">
+<strong>Vision</strong>
+            </p>
+        </div>
+       <div class="vision-container">
+            <div class="vision-left" style="background-color: #75975e; border: none;">
+                <h2 style="color: #ffffff; font-size: 1.5rem; font-style: italic; line-height: 1.5; margin: 0; text-shadow: 1px 1px 5px rgba(0,0,0,0.2);">
+                    "A Philippine where geographical isolation is a thing of the past. A future where every student can go to school, every farmer can bring their crops to the market, and every patient can reach the hospital safely and without compromises."
+                </h2>
+            </div>
+            <div class="vision-right">
+                <div class="objective-box">
+                    <h3 style="color: #4b6043; margin-top: 0; border-bottom: 1px solid #eee; padding-bottom: 10px;">Objectives</h3>
+                    <ul style="line-height: 1.8; padding-left: 20px; color: #333;">
+                        <li><b>Safety First:</b> Advocate for disaster-resilient bridge designs in flood-prone rural areas.</li>
+                        <li><b>Rural Mobility:</b> Link small-scale areas to local economic hubs.</li>
+                        <li><b>Safe Access:</b> Ensure safe passage for people in "last-mile" villages.</li>               
+                    </ul>
+                </div>
+                <div class="objective-box" style="border-left: 6px solid #4b6043;">
+                    <h3 style="color: #4b6043; margin-top: 2;">Last-Mile Truss</h3>
+                    <p style="margin-bottom: 0; color: #555; line-height: 1.6;">
+                        Last-Mile Truss is a student-led advocacy dedicated to amplifying the voices and providing engineering solutions for Filipino isolated by challenging terrains and waterways. LMT stand firm in the belief that resilient and safae infrastructure  is not a privilege, but a fundamental right of every citizen.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="blueprints" class="page" style="padding-top: 40px; padding-bottom: 50px;">
+<div class="container" style="margin-top: -75px; padding-bottom: 50px;">
+        <div class="card-custom shadow-lg" style="border: none; max-width: 850px; margin: 0 auto 40px; background: white; border-radius: 20px; padding: 10px; border-left: 10px solid #b3cf99;">
+            <p style="color: #4b6043; font-size: 1rem; line-height: 1.8; margin-bottom: 0; text-align: center; ">
+<strong>Blueprints</strong>
+            </p>
+        </div>
+    
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-md-12">
+                <div style="background: white; padding: 40px; border-radius: 25px; border-left: 10px solid #4b6043; box-shadow: 0 5px 20px rgba(0,0,0,0.05);">
+                    <h2 class="fw-bold mb-4" style="color: #4b6043; letter-spacing: -1px;">Voice for the Unseen</h2>
+                    <p><strong>Last-Mile Truss</strong> believes that geographical isolation should never be a barrier to human potential or government attention. In the most remote "last-mile" areas of the Philippines, the absence of resilient infrastructure creates a cycle of poverty and danger. When a river swells or a mountain path erodes, a student's education is paused, a farmer's livelihood is threatened, and a patient's life is put at risk.</p>
+                        <p>This advocacy recognizes its position as a vital link. It amplifies the voices of these isolated regions and serves as a platform to bring the urgent needs of rural Filipinos to the forefront of national conversation, urging the government to prioritize the infrastructure that these citizens rightfully deserve.</p>
+                        <p>It pushes for structures engineered to withstand extreme weather, ensuring that government-funded projects in rural areas are built to last and will protect lives.</p>
+                        <p>By bridging the physical gap between farms and markets, Last-Mile Truss advocates for the economic rights of rural workers, ensuring their projects reach the market regardless of the terrain. It stands for the students walking to school and patients seeking urgent care. Its blueprints are a call to action for the government to ensure that safe passage is a guaranteed right for every Filipino, no matter how remote their home may be.</p>
+                        <p>By combining technical expertise with active advocacy, this student-led initiative proves that even a dedicated platform can bridge the gap between a community in neeff and the solutions they deserve.</p>
+ </div>
+            </div>
+        </div>
+        <div class="row g-4 mb-5">
+            <div class="col-12 text-center mb-2">
+                <h3 style="color: #4b6043; font-weight: 800; letter-spacing: -1px;">Advocacy Compass</h3>
+                <p class="text-muted">How we bridge the gap beyond engineering.</p>
+            </div>
+           
+            <div class="col-md-4">
+                <div class="card-custom h-100" style="background: #ffffff; border-top: 5px solid #4b6043; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                    <h5 style="color: #4b6043; font-weight: 2000; font-size: 1rem; margin-bottom: 15px;">Socio-Educational Equity</h5>
+                    <p style="font-size: 0.9rem; color: #555; line-height: 1.6;">
+                        Advocate for safe, year-round access to schools for students in "last-mile" villages. 
+                    </p>
+	<div style="margin-top: 15px; padding-top: 10px; border-top: 1px solid #eee; font-size: 0.85rem; color: #658354; font-weight: 600;"> 
+SIGNIFICANCE: Prevents the "water-dependent" pause on education, ensuring rural youth have the same academic consistency as urban students.
+                </div>
+            </div>
+</div>
+      <div class="col-md-4">
+                <div class="card-custom h-100" style="background: #ffffff; border-top: 5px solid #4b6043; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                    <h5 style="color: #4b6043; font-weight: 2000; font-size: 1rem; margin-bottom: 15px;">Economic Resilience</h5>
+                    <p style="font-size: 0.9rem; color: #555; line-height: 1.6;">
+Linking small-scale agricultural areas to local economic hubs through resilient infrastructure.
+                    </p>
+	<div style="margin-top: 15px; padding-top: 10px; border-top: 1px solid #eee; font-size: 0.85rem; color: #658354; font-weight: 600;"> 
+SIGNIFICANCE: Breaks the cycle of poverty by ensuring farmers can reach markets even during the monsoon season, protecting their livelihoods from terrain-based losses.
+                </div>
+            </div>
+</div>
+      <div class="col-md-4">
+                <div class="card-custom h-100" style="background: #ffffff; border-top: 5px solid #4b6043; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                    <h5 style="color: #4b6043; font-weight: 2000; font-size: 1rem; margin-bottom: 15px;">Legislative Accountability.</h5>
+                    <p style="font-size: 0.9rem; color: #555; line-height: 1.6;">
+Urge the government to prioritize disaster-resilient designs over temporary, substandard fixes in remote regions.
+                    </p>
+	<div style="margin-top: 15px; padding-top: 10px; border-top: 1px solid #eee; font-size: 0.85rem; color: #658354; font-weight: 600;"> 
+SIGNIFICANCE: Shifts the national conversation to recognize safe passage as a fundamental right, forcing transparency in how rural infrastructure funds are utilized.
+                </div>
+            </div>
+</div>
+  <div class="row g-4">
+            <div class="col-md-6">
+                <div style="background: #eee; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                    <img src="https://www.rappler.com/tachyon/r3-assets/612F469A6EA84F6BAE882D2B94A4B421/img/E7022CCE5C564CB39535FCAD26B00B29/tight-rope-carousel-20161118.jpg?resize=640%2C360&zoom=1" style="width: 100%; height: 300px; object-fit: cover;">
+                    <div style="padding: 20px; background: white;">
+                        <h6 style="font-weight: 800; color: #c0392b; margin-bottom: 5px;">The Reality: Risk</h6>
+                    </div>
+                </div>
+            </div>   
+            <div class="col-md-6">
+                <div style="background: #eee; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                    <img src="https://gcp-na-images.contentstack.com/v3/assets/bltea6093859af6183b/blte8c279a3075a1d8d/69ae8383c082a5d7dadec7a3/HuajiangGrandCanyon-Bridge_WGP_2026.jpg?branch=production&width=3840&quality=75&auto=webp&crop=3%3A2" style="width: 100%; height: 300px; object-fit: cover;">
+                    <div style="padding: 20px; background: white;">
+                        <h6 style="font-weight: 800; color: #4b6043; margin-bottom: 5px;">The Solution: Resilience</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 
+</div>
+</div>
+</div>
+   <div id="pulse" class="page">
+    <div class="container" style="padding-top: 40px; padding-bottom: 60px;">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold" style="color: #4b6043; font-size: 2.5rem; letter-spacing: -1px;">Community Pulse</h2>
+            <p style="color: #666; max-width: 600px; margin: 0 auto;">
+                Every bridge starts with a voice. Use this space to highlight marginalized areas that require urgent infrastructure attention.
+            </p>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card-custom" style="background-color: #ffffff; border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.05); padding: 40px;">
+                    <div style="margin-bottom: 25px;">
+                        <h5 style="color: #4b6043; font-weight: 700;">Submit a Location</h5>
+                        <p class="small text-muted">Identify a site where geographical isolation is hindering a community.</p>
+                    </div>
+                   
+                    <div class="mb-3">
+                        <label style="font-size: 0.85rem; font-weight: 600; color: #4b6043; margin-bottom: 5px; display: block;">Reporter Name</label>
+                        <input type="text" id="name" placeholder="Enter your name or organization" style="background: #f8fcf7;">
+                    </div>
+                    <div class="mb-3">
+                        <label style="font-size: 0.85rem; font-weight: 600; color: #4b6043; margin-bottom: 5px; display: block;">Site Location & Concern</label>
+                        <textarea id="msg" rows="4" placeholder="e.g., Sitio Riverside, Brgy. Hope - Students cross a 50m river via rope during floods..." style="background: #f8fcf7;"></textarea>
+                    </div>
+                    <button onclick="postPulse()" class="btn fw-bold w-100" style="background-color: #4b6043; color: white; border-radius: 12px; padding: 12px; transition: 0.3s;">
+                        Pin to Advocacy Map
+                    </button>
+                </div>
+                <div style="margin-top: 50px;">
+                    <h6 style="text-transform: uppercase; letter-spacing: 2px; color: #658354; font-weight: 800; font-size: 0.8rem; margin-bottom: 20px;">Recent Reports</h6>
+                    <div id="feed" style="text-align: left;">
+                        <div class="p-4 mb-3 border-0 rounded-4 text-start bg-white shadow-sm" style="border-left: 6px solid #b3cf99 !important;">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <strong style="font-size: 1.1rem; color: #4b6043;">LMT Advocacy Team</strong>
+                                <div style="font-size: 0.75rem; color: #999; background: #f0f4ee; padding: 4px 10px; border-radius: 20px;">System Note</div>
+                            </div>
+                            <p class="mt-2 mb-0" style="color: #555; line-height: 1.6;">
+                                Welcome to the Free Wall. Your entries here serve as data points for our ongoing research into last-mile sites across the archipelago.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+ <div id="engineer" class="page">
+    <div class="container" style="padding-top: 60px; padding-bottom: 80px;">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card-custom text-center" style="background: white; padding: 40px; border-radius: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.05);">
+                   
+                    <div style="margin-bottom: 25px;">
+<div class="profile-circle" style="margin-top: 20px;">LMT</div>
+                    </div>
+                    <h3 style="color: #4b6043; font-weight: 800; margin-bottom: 5px;">Annie Rose A. Baylado</h3>
+                    <p style="color: #658354; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; font-size: 0.8rem; margin-bottom: 20px;">
+                        Advocacy Lead & Civil Engineering Student
+                    </p>
+                   
+                    <div style="background: #f8fcf7; padding: 20px; border-radius: 20px; text-align: left; margin-top: 20px;">
+                        <div style="margin-bottom: 15px;">
+                            <div style="font-size: 0.75rem; color: #999; text-transform: uppercase; font-weight: 700;">Email Address</div>
+                            <div style="color: #4b6043; font-weight: 500;">arabaylado@gmail.com</div>
+                        </div>
+                       
+                        <div style="margin-bottom: 15px;">
+                            <div style="font-size: 0.75rem; color: #999; text-transform: uppercase; font-weight: 700;">Institution</div>
+                            <div style="color: #4b6043; font-weight: 500;">Civil Engineering Department, WMSU</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 0.75rem; color: #999; text-transform: uppercase; font-weight: 700;">Advocacy Significance</div>
+                            <div style="color: #555; font-size: 0.85rem; line-height: 1.5; margin-top: 5px;">
+                                Dedicated to ensuring that technical engineering solutions serve the most vulnerable sectors of our society.
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 30px;">
+                        <a href="mailto:arabaylado@gmail.com" class="btn" style="background: #4b6043; color: white; padding: 12px 30px; border-radius: 12px; font-weight: 600; text-decoration: none;">
+                            Send a Message
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <footer class="text-center">
+        <small class="text-muted" style="font-size: 0.85rem; opacity: 0.7;">Last-Mile Truss &copy; 2026</small>
+    </footer>
+    <script>
+        function goto(id, btn) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
+            document.getElementById(id).classList.add('active-page');
+            document.querySelectorAll('.menu button').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            window.scrollTo(0,0);
+        }
+        function postPulse() {
+            var n = document.getElementById('name').value;
+            var m = document.getElementById('msg').value;
+            if(!n || !m) return;
+            var postId = 'post-' + Date.now();
+            var d = document.createElement('div');
+            d.className = "p-3 mb-3 border rounded-3 text-start bg-white shadow-sm";
+            d.id = postId;
+          
+            d.innerHTML = `
+                <div class="post-content">
+                    <strong style="font-size: 1.2rem;">${n}</strong>
+                    <p class='mb-2 text-muted' style="font-size: 1rem; color: #4b6043;">${m}</p>
+                    <button class="btn btn-sm btn-link p-0 text-decoration-none" onclick="toggleComment('${postId}')" style="color: #658354;">Comment</button>
+                </div>
+                <div class="comment-section mt-2" style="display:none; padding-left: 15px; border-left: 2px solid #ddd;">
+                    <input type="text" placeholder="Write a comment..." class="form-control form-control-sm mb-1" onkeypress="addComment(event, '${postId}')">
+                    <div class="comments-list" style="font-size: 0.85rem;"></div>
+                </div>
+            `;
+            document.getElementById('feed').prepend(d);
+            document.getElementById('name').value = "";
+            document.getElementById('msg').value = "";
+        }
+        function toggleComment(id) {
+            var section = document.querySelector('#' + id + ' .comment-section');
+            section.style.display = section.style.display === 'none' ? 'block' : 'none';
+        }
+        function addComment(event, id) {
+            if (event.key === 'Enter' && event.target.value !== "") {
+                var commentList = document.querySelector('#' + id + ' .comments-list');
+                var newComment = document.createElement('div');
+                newComment.className = "text-dark mt-1 border-top pt-1";
+                newComment.innerHTML = `<strong>Guest:</strong> ${event.target.value}`;
+              
+                commentList.appendChild(newComment);
+                event.target.value = "";
+            }
+        }
+    </script>
+</body>
+</html>
