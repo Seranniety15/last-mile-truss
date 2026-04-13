@@ -596,19 +596,62 @@ SIGNIFICANCE: Shifts the national conversation to recognize safe passage as a fu
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 <script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyD1vrlk4Mb0V9e0QUoGfwmFKLVW5zHhp8A",
-    authDomain: "last-mile-truss-94f0c.firebaseapp.com",
-    databaseURL: "https://last-mile-truss-94f0c-default-rtdb.firebaseio.com",
-    projectId: "last-mile-truss-94f0c",
-    storageBucket: "last-mile-truss-94f0c.firebasestorage.app",
-    messagingSenderId: "130583511826",
-    appId: "1:130583511826:web:82cc967c7fd790cf3929cb",
-  };
-  // Initialize Firebase
-  firebase.initializeApp(firebaseConfig);
-  const database = firebase.database();
+    // Your Firebase Config (from your snippet)
+    const firebaseConfig = {
+        apiKey: "AIzaSyD1vrlk4Mb0V9e0QUoGfwmFKLVW5zHhp8A",
+        authDomain: "last-mile-truss-94f0c.firebaseapp.com",
+        databaseURL: "https://last-mile-truss-94f0c-default-rtdb.firebaseio.com",
+        projectId: "last-mile-truss-94f0c",
+        storageBucket: "last-mile-truss-94f0c.appspot.com",
+        messagingSenderId: "1064821869871",
+        appId: "1:1064821869871:web:3e3c649987f2e4630a6125"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+    // Navigation Function
+    function goto(id, btn) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
+        document.getElementById(id).classList.add('active-page');
+        document.querySelectorAll('.menu button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        window.scrollTo(0,0);
+    }
+    // Function to Save Post to Firebase
+    function postPulse() {
+        var n = document.getElementById('name').value;
+        var m = document.getElementById('msg').value;
+       
+        if(n && m) {
+            database.ref('pulse_reports').push({
+                name: n,
+                message: m,
+                timestamp: Date.now()
+            });
+            document.getElementById('name').value = "";
+            document.getElementById('msg').value = "";
+        } else {
+            alert("Please fill in both fields!");
+        }
+    }
+    // Function to Load Posts from Firebase for everyone to see
+    database.ref('pulse_reports').on('child_added', (snapshot) => {
+        const data = snapshot.val();
+        const feed = document.getElementById('feed');
+       
+        const div = document.createElement('div');
+        div.className = "p-4 mb-3 border-0 rounded-4 text-start bg-white shadow-sm";
+        div.style.borderLeft = "6px solid #b3cf99";
+       
+        div.innerHTML = `
+            <div class="d-flex justify-content-between">
+                <strong style="color: #4b6043;">${data.name}</strong>
+                <small style="color: #999;">${new Date(data.timestamp).toLocaleDateString()}</small>
+            </div>
+            <p class="mt-2 mb-0" style="color: #555;">${data.message}</p>
+        `;
+        feed.prepend(div);
+    });
 </script>
-    </script>
 </body>
 </html>
