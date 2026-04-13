@@ -554,52 +554,61 @@ SIGNIFICANCE: Shifts the national conversation to recognize safe passage as a fu
         <small class="text-muted" style="font-size: 0.85rem; opacity: 0.7;">Last-Mile Truss &copy; 2026</small>
     </footer>
     <script>
-        function goto(id, btn) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
-            document.getElementById(id).classList.add('active-page');
-            document.querySelectorAll('.menu button').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            window.scrollTo(0,0);
-        }
-        function postPulse() {
-            var n = document.getElementById('name').value;
-            var m = document.getElementById('msg').value;
-            if(!n || !m) return;
-            var postId = 'post-' + Date.now();
-            var d = document.createElement('div');
-            d.className = "p-3 mb-3 border rounded-3 text-start bg-white shadow-sm";
-            d.id = postId;
-          
-            d.innerHTML = `
-                <div class="post-content">
-                    <strong style="font-size: 1.2rem;">${n}</strong>
-                    <p class='mb-2 text-muted' style="font-size: 1rem; color: #4b6043;">${m}</p>
-                    <button class="btn btn-sm btn-link p-0 text-decoration-none" onclick="toggleComment('${postId}')" style="color: #658354;">Comment</button>
-                </div>
-                <div class="comment-section mt-2" style="display:none; padding-left: 15px; border-left: 2px solid #ddd;">
-                    <input type="text" placeholder="Write a comment..." class="form-control form-control-sm mb-1" onkeypress="addComment(event, '${postId}')">
-                    <div class="comments-list" style="font-size: 0.85rem;"></div>
-                </div>
-            `;
-            document.getElementById('feed').prepend(d);
-            document.getElementById('name').value = "";
-            document.getElementById('msg').value = "";
-        }
-        function toggleComment(id) {
-            var section = document.querySelector('#' + id + ' .comment-section');
-            section.style.display = section.style.display === 'none' ? 'block' : 'none';
-        }
-        function addComment(event, id) {
-            if (event.key === 'Enter' && event.target.value !== "") {
-                var commentList = document.querySelector('#' + id + ' .comments-list');
-                var newComment = document.createElement('div');
-                newComment.className = "text-dark mt-1 border-top pt-1";
-                newComment.innerHTML = `<strong>Guest:</strong> ${event.target.value}`;
-              
-                commentList.appendChild(newComment);
-                event.target.value = "";
-            }
-        }
+    function goto(id, btn) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
+        document.getElementById(id).classList.add('active-page');
+        document.querySelectorAll('.menu button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        window.scrollTo(0,0);
+    }
+    // This sends data to Firebase
+    function postPulse() {
+        var n = document.getElementById('name').value;
+        var m = document.getElementById('msg').value;
+        if(!n || !m) return;
+        database.ref('pulse_reports').push({
+            name: n,
+            message: m,
+            timestamp: Date.now()
+        });
+        document.getElementById('name').value = "";
+        document.getElementById('msg').value = "";
+    }
+    // This "listens" for new posts and displays them automatically
+    database.ref('pulse_reports').on('child_added', (snapshot) => {
+        const data = snapshot.val();
+        const feed = document.getElementById('feed');
+       
+        const div = document.createElement('div');
+        div.className = "p-4 mb-3 border-0 rounded-4 text-start bg-white shadow-sm";
+        div.style.borderLeft = "6px solid #b3cf99";
+       
+        div.innerHTML = `
+            <div class="d-flex justify-content-between">
+                <strong style="color: #4b6043;">${data.name}</strong>
+                <small style="color: #999;">${new Date(data.timestamp).toLocaleDateString()}</small>
+            </div>
+            <p class="mt-2 mb-0" style="color: #555;">${data.message}</p>
+        `;
+        feed.prepend(div);
+    });
+</script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyD1vrlk4Mb0V9e0QUoGfwmFKLVW5zHhp8A",
+    authDomain: "last-mile-truss-94f0c.firebaseapp.com",
+    databaseURL: "https://last-mile-truss-94f0c-default-rtdb.firebaseio.com",
+    projectId: "last-mile-truss-94f0c",
+    storageBucket: "last-mile-truss-94f0c.firebasestorage.app",
+    messagingSenderId: "130583511826",
+    appId: "1:130583511826:web:82cc967c7fd790cf3929cb",
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  const database = firebase.database();
+</script>
     </script>
 </body>
 </html>
